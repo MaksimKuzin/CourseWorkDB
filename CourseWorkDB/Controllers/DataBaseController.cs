@@ -1,20 +1,22 @@
 ﻿using CourseWorkDB.DataBase;
 using CourseWorkDB.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace CourseWorkDB.Controllers
 {
-    public class HomeController : Controller
+    [Authorize]
+    public class DataBaseController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<DataBaseController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public DataBaseController(ILogger<DataBaseController> logger)
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View();
         }
@@ -27,7 +29,7 @@ namespace CourseWorkDB.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel { RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
