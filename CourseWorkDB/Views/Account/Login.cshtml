@@ -1,24 +1,24 @@
 ﻿@model CourseWorkDB.DataBase.User
-
+@{
+    Layout = null;
+}
 <h2>Вход на сайт</h2>
-
-<a asp-action="Register" asp-controller="Account">Регистрация</a>
 
 <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
         <div class="form-group">
-            <label asp-for="Login">Введите Email</label>
-            <input type="text" asp-for="Login" />
+            <label asp-for="Login">Введите логин</label>
+            <input type="text" asp-for="Login" style="width:170px; margin-left:7px" />
             <span asp-validation-for="Login" />
         </div>
-        <div class="form-group">
+        <div class="form-group" style="margin-top:10px">
             <label asp-for="Password">Введите пароль</label>
-            <input asp-for="Password" />
+            <input asp-for="Password" style="width:170px" />
             <span asp-validation-for="Password" />
         </div>
-        <div class="form-group">
-            <input type="submit" value="Войти" class="btn btn-outline-dark" />
+        <div class="form-group" style="margin-top:10px">
+            <input type="submit" value="Войти" class="btn btn-outline-dark"  />
         </div>
     </div>
 </form>
