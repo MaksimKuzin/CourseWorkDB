@@ -1,0 +1,91 @@
+﻿@model IEnumerable<CourseWorkDB.DataBase.Parishioner>
+@{
+	ViewData["Title"] = "Index";
+}
+<script type="text/javascript">
+	function Edit() {
+		var chkd = document.querySelectorAll('input:checked');
+		var id = chkd[1].getAttribute("id");
+		var hidden = document.getElementsByName('ids')[0];
+		hidden.value = id;
+	}
+</script>
+
+
+@using (Html.BeginForm("ParishionerActions", "DataBase", FormMethod.Get))
+{
+	<input type="hidden" name="ids" value="" />
+	<table class="table">
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Name)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Surname)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Patronymic)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Age)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Sex)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Address)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.PhoneNumber)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Priest.Title)
+				@Html.DisplayNameFor(model => model.Priest.Name)
+			</th>
+			<th></th>
+		</tr>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<th>
+					@Html.DisplayFor(modelItem => item.Name)
+				</th>
+				<th>
+					@Html.DisplayFor(modelItem => item.Surname)
+				</th>
+				<th>
+					@Html.DisplayFor(modelItem => item.Patronymic)
+				</th>
+				<th>
+					@Html.DisplayFor(modelItem => item.Age)
+				</th>
+				<th>
+					@Html.DisplayFor(modelItem => item.Sex)
+				</th>
+				<th>
+					@Html.DisplayFor(modelItem => item.Address)
+				</th>
+				<th>
+					@Html.DisplayFor(modelItem => item.PhoneNumber)
+				</th>
+				<th>
+					@Html.DisplayFor(modelItem => item.Priest.Title)
+					@Html.DisplayFor(modelItem => item.Priest.Name)
+				</th>
+				<th>
+					<input type="checkbox" id="@item.Id" onclick="Edit()">
+				</th>
+				<th></th>
+			</tr>
+		}
+	</table>
+	<input type="submit"
+	   name="button"
+	   value="Добавить прихожанина" />
+	<input type="submit"
+	   name="button"
+	   value="Редактировать прихожанина" />
+	<input type="submit"
+	   name="button"
+	   value="Удалить прихожанина" />
+}

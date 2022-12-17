@@ -39,7 +39,7 @@ namespace CourseWorkDB.Controllers
                     return DeletePriest(ids);
                 default:
                     return null;
-                    
+
             }
         }
         [HttpGet]
@@ -64,28 +64,129 @@ namespace CourseWorkDB.Controllers
         [HttpGet]
         public ActionResult EditPriest(int ids)
         {
-            var model = db.Priests.SingleOrDefault(p => p.Id == ids);
-            return View("../Priest/Edit", model);
+            var priest = db.Priests.SingleOrDefault(p => p.Id == ids);
+            if (priest != null)
+                return View("../Priest/Edit", priest);
+            else
+            {
+                IEnumerable<Priest> model = db.Priests.AsEnumerable();
+                return View("../Priest/Index", model);
+            }
         }
         [HttpPost]
         public ActionResult EditPriest(int id, string title, string name, DateTime initialDate)
         {
-            var Priest = db.Priests.SingleOrDefault(p => p.Id == id);
-            Priest.Title = title;
-            Priest.Name = name;
-            Priest.InitialDate = initialDate;
-            db.Priests.Update(Priest);
+            var priest = db.Priests.SingleOrDefault(p => p.Id == id);
+            priest.Title = title;
+            priest.Name = name;
+            priest.InitialDate = initialDate;
+            db.Priests.Update(priest);
             db.SaveChanges();
             IEnumerable<Priest> model = db.Priests.AsEnumerable();
             return View("../Priest/Index", model);
         }
         public ActionResult DeletePriest(int id)
         {
-            var Priest = db.Priests.SingleOrDefault(p => p.Id == id);
-            db.Remove(Priest);
+            var priest = db.Priests.SingleOrDefault(p => p.Id == id);
+            db.Remove(priest);
             db.SaveChanges();
             IEnumerable<Priest> model = db.Priests.AsEnumerable();
             return View("../Priest/Index", model);
+        }
+        public ActionResult Parishioner()
+        {
+            IEnumerable<Parishioner> model = db.Parishioners;
+            foreach(var parishioner in model)
+            //{
+            //    var priest = db.Priests.SingleOrDefault(p => p.Id == parishioner.PriestId);
+            //    parishioner.Priest = priest;
+            //}
+            return View("../Parishioner/Index", model);
+        }
+        public ActionResult ParishionerActions(string button, int ids)
+        {
+            switch (button)
+            {
+                case "Добавить прихожанина":
+                    return CreateParishioner();
+                case "Редактировать прихожанина":
+                    return EditParishioner(ids);
+                case "Удалить прихожанина":
+                    return DeleteParishioner(ids);
+                default:
+                    return null;
+
+            }
+        }
+        [HttpGet]
+        public ActionResult CreateParishioner()
+        {
+            return View("../Parishioner/Create");
+        }
+        [HttpPost]
+        public ActionResult CreateParishioner(string name, string surname, string patronymic, short age, bool sex, string address, string phoneNumber, int priestId)
+        {
+            var priest = db.Priests.SingleOrDefault(p => p.Id == priestId);
+            var parishioner = new Parishioner
+            {
+                Address = address,
+                PhoneNumber = phoneNumber,
+                Name = name,
+                Surname = surname,
+                Patronymic = patronymic,
+                Age = age,
+                Sex = sex,
+                PriestId = priestId,
+                Priest = priest
+            };
+            if (!priest.Parishioners.Contains(parishioner))
+                priest.Parishioners.Add(parishioner);
+            db.Priests.Update(priest);
+            db.Parishioners.Add(parishioner);
+            db.SaveChanges();
+            IEnumerable<Parishioner> model = db.Parishioners;
+            return View("../Parishioner/Index", model);
+        }
+        [HttpGet]
+        public ActionResult EditParishioner(int id)
+        {
+            var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == id);
+            if (parishioner != null)
+                return View("../Parishioner/Edit", parishioner);
+            else
+            {
+                IEnumerable<Parishioner> model = db.Parishioners.AsEnumerable();
+                return View("../Parishioner/Index", model);
+            }
+        }
+        [HttpPost]
+        public ActionResult EditParishioner(int id, string name, string surname, string patronymic, short age, bool sex, string address, string phoneNumber, int priestId)
+        {
+            var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == id);
+            var priest = db.Priests.SingleOrDefault(p => p.Id == priestId);
+            parishioner.Name = name;
+            parishioner.Surname = surname;
+            parishioner.Patronymic = patronymic;
+            parishioner.Age = age;
+            parishioner.Address = address;
+            parishioner.PhoneNumber = phoneNumber;
+            parishioner.PriestId = priestId;
+            parishioner.Priest = priest;
+            if (!priest.Parishioners.Contains(parishioner))
+                priest.Parishioners.Add(parishioner);
+            db.Parishioners.Update(parishioner);
+            db.Priests.Update(priest);
+            db.SaveChanges();
+            IEnumerable<Parishioner> model = db.Parishioners.AsEnumerable();
+            return View("../Parishioner/Index", model);
+        }
+        public ActionResult DeleteParishioner(int id)
+        {
+            var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == id);
+            db.Remove(parishioner);
+            db.SaveChanges();
+            IEnumerable<Parishioner> model = db.Parishioners;
+            return View("../Parishioner/Index", model);
         }
         public IActionResult Privacy()
         {
