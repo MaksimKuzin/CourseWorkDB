@@ -5,7 +5,7 @@
 <script type="text/javascript">
 	function Edit() {
 		var chkd = document.querySelectorAll('input:checked');
-		var id = chkd[1].getAttribute("id");
+		var id = chkd[0].getAttribute("id");
 		var hidden = document.getElementsByName('ids')[0];
 		hidden.value = id;
 	}
@@ -60,7 +60,14 @@
 					@Html.DisplayFor(modelItem => item.Age)
 				</th>
 				<th>
-					@Html.DisplayFor(modelItem => item.Sex)
+					@if (item.Sex == true)
+					{
+						<label>Мужчина</label>
+					}
+					else
+					{
+						<label>Женщина</label>
+					}
 				</th>
 				<th>
 					@Html.DisplayFor(modelItem => item.Address)

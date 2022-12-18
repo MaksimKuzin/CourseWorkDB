@@ -96,11 +96,16 @@ namespace CourseWorkDB.Controllers
         public ActionResult Parishioner()
         {
             IEnumerable<Parishioner> model = db.Parishioners;
-            foreach(var parishioner in model)
+            //foreach(var parishioner in model)
             //{
             //    var priest = db.Priests.SingleOrDefault(p => p.Id == parishioner.PriestId);
             //    parishioner.Priest = priest;
             //}
+            return View("../Parishioner/Index", model);
+        }
+        public ActionResult ParishionerByPriestId(int priestId)
+        {
+            IEnumerable<Parishioner> model = db.Parishioners.Where(p => p.PriestId == priestId);
             return View("../Parishioner/Index", model);
         }
         public ActionResult ParishionerActions(string button, int ids)
