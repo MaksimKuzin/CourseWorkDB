@@ -1,0 +1,50 @@
+﻿@model CourseWorkDB.Models.DivineServiceHelper
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>DivineService</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateDivineService">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriestId" class="control-label"></label>
+                <input asp-for="PriestId" class="form-control" />
+                <span asp-validation-for="PriestId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Justification" class="control-label"></label>
+                <input asp-for="Justification" class="form-control" />
+                <span asp-validation-for="Justification" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Prayer" class="control-label"></label>
+                <input asp-for="Prayer" class="form-control" />
+                <span asp-validation-for="Prayer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Добавить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

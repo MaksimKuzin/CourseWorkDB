@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace CourseWorkDB.DataBase;
 
 public partial class Event
 {
     public int Id { get; set; }
-
+    [DisplayName("Название")]
     public string Name { get; set; } = null!;
-
+    [DisplayName("Дата")]
     public DateTime Date { get; set; }
+    [DisplayName("Тип мероприятия")]
+    public string Type { get; set; }
 
     public int PriestId { get; set; }
 

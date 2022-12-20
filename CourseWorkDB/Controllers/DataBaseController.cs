@@ -193,6 +193,95 @@ namespace CourseWorkDB.Controllers
             IEnumerable<Parishioner> model = db.Parishioners;
             return View("../Parishioner/Index", model);
         }
+        public ActionResult Event()
+        {
+            var model = db.Events;
+            return View("../Event/Index", model);
+        }
+        public ActionResult EventActions(string button, int ids)
+        {
+            switch (button)
+            {
+                case "Добавить службу":
+                    return CreateDivineService();
+                case "Редактировать мероприятие":
+                    return EditEvent(ids);
+                case "Удалить мероприятие":
+                    return DeleteEvent(ids);
+                default:
+                    return null;
+            }
+        }
+        [HttpGet]
+        public ActionResult CreateDivineService()
+        {
+            return View("../DivineService/Create");
+        }
+        [HttpPost]
+        public ActionResult CreateDivineService(string name, DateTime date, int priestId, string justification, string prayer)
+        {
+            var @event = new Event
+            {
+                Name = name,
+                Date = date,
+                PriestId = priestId,
+                Type = "Служба"
+            };
+            db.Events.Add(@event);
+            db.SaveChanges();
+            int maxId = db.Events.Max(e => e.Id);
+            @event = db.Events.SingleOrDefault(e => e.Id == maxId);
+            var divineService = new DivineService
+            {
+                Event = @event,
+                EventId = maxId,
+                Justification = justification,
+                Prayer = prayer
+            };
+            db.DivineServices.Add(divineService);
+            db.SaveChanges();
+            var model = db.Events;
+            return View("../Event/Index", model);
+        }
+        public ActionResult AboutDivineService(int id)
+        {
+            var model = db.Events.SingleOrDefault(e => e.Id == id);
+            var divineService = db.DivineServices.SingleOrDefault(e => e.EventId == id);
+            model.DivineService = divineService;
+            return View("../DivineService/Index", model);
+        }
+        [HttpGet]
+        public ActionResult EditEvent(int id)
+        {
+            var model = db.Events.SingleOrDefault(e=>e.Id==id);
+            var divineService = db.DivineServices.SingleOrDefault(e => e.EventId == id);
+            if (divineService != null)
+                model.DivineService = divineService;
+            return View("../Event/Edit",model);
+        }
+        public ActionResult EditEvent(int id, string name, DateTime date, int priestId, string justification, string prayer)
+        {
+            var @event = db.Events.SingleOrDefault(e => e.Id == id);
+            @event.Name = name;
+            @event.Date = date;
+            @event.PriestId = priestId;
+            var divineService = db.DivineServices.SingleOrDefault(e => e.EventId == id);
+            divineService.Justification = justification;
+            divineService.Prayer = prayer;
+            db.Events.Update(@event);
+            db.DivineServices.Update(divineService);
+            db.SaveChanges();
+            var model = db.Events;
+            return View("../Event/Index", model);
+        }
+        public ActionResult DeleteEvent(int id)
+        {
+            var @event = db.Events.SingleOrDefault(e => e.Id == id);
+            db.Remove(@event);
+            db.SaveChanges();
+            var model = db.Events;
+            return View("../Event/Index", model);
+        }
         public IActionResult Privacy()
         {
             return View("Privacy");

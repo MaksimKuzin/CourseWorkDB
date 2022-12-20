@@ -1,0 +1,75 @@
+﻿@model IEnumerable<CourseWorkDB.DataBase.Event>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<script type="text/javascript">
+    function Edit() {
+        var chkd = document.querySelectorAll('input:checked');
+        var id = chkd[0].getAttribute("id");
+        var hidden = document.getElementsByName('ids')[0];
+        hidden.value = id;
+    }
+</script>
+
+
+@using (Html.BeginForm("EventActions", "DataBase", FormMethod.Get))
+{
+    <input type="hidden" name="ids" value="" />
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                Дополнительная информация
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </th>
+                <th>
+                    @if (item.Type == "Служба")
+                    {
+                        <a href="~/DataBase/AboutDivineService?id=@item.Id">Подробнее</a>
+                    }
+                </th>
+                <th>
+                    <input type="checkbox" id="@item.Id" onclick="Edit()">
+                </th>
+                <th></th>
+            </tr>
+        }
+    </table>
+    <input type="submit"
+       name="button"
+       value="Добавить службу" />
+    <input type="submit"
+       name="button"
+       value="Добавить священное событыие" />
+    <input type="submit"
+       name="button"
+       value="Добавить деятельность" />
+    <input type="submit"
+       name="button"
+       value="Редактировать мероприятие" />
+    <input type="submit"
+       name="button"
+       value="Удалить мероприятие" />
+}
