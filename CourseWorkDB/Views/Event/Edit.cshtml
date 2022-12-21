@@ -6,38 +6,103 @@
 
 @if (Model.Type == "Служба")
 {
-    <form asp-action="EditEvent">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" name="id" value="@Model.Id" />
-        <input type="hidden" name="id" value="@Model.Type" />
-        <div class="form-group">
-            <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="EditEvent">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="hidden" name="type" value="@Model.Type" />
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Date" class="control-label"></label>
+                    <input asp-for="Date" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PriestId" class="control-label"></label>
+                    <input asp-for="PriestId" class="form-control" />
+                    <span asp-validation-for="PriestId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DivineService.Justification" class="control-label"></label>
+                    <input name="justification" asp-for="DivineService.Justification" class="form-control" />
+                    <span asp-validation-for="DivineService.Justification" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DivineService.Prayer" class="control-label"></label>
+                    <input name="prayer" asp-for="DivineService.Prayer" class="form-control" />
+                    <span asp-validation-for="DivineService.Prayer" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Сохранить" class="btn btn-primary" />
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <label asp-for="Date" class="control-label"></label>
-            <input asp-for="Date" class="form-control" />
-            <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+    <div>
+        <a asp-action="Event">Back to List</a>
+    </div>
+}
+@if (Model.Type == "Священное событие")
+{
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="EditEvent">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="hidden" name="type" value="@Model.Type" />
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Date" class="control-label"></label>
+                    <input asp-for="Date" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PriestId" class="control-label"></label>
+                    <input asp-for="PriestId" class="form-control" />
+                    <span asp-validation-for="PriestId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SacredEvent.Place" class="control-label"></label>
+                    <input name="place" asp-for="SacredEvent.Place" class="form-control" />
+                    <span asp-validation-for="SacredEvent.Place" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SacredEvent.FinishDate" class="control-label"></label>
+                    <input name="finishDate" asp-for="SacredEvent.FinishDate" class="form-control" />
+                    <span asp-validation-for="SacredEvent.FinishDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SacredEvent.Transport" class="control-label"></label>
+                    <input name="transport" asp-for="SacredEvent.Transport" class="form-control" />
+                    <span asp-validation-for="SacredEvent.Transport" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SacredEvent.Route" class="control-label"></label>
+                    <input name="route" asp-for="SacredEvent.Route" class="form-control" />
+                    <span asp-validation-for="SacredEvent.Route" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SacredEvent.SourceOfFunding" class="control-label"></label>
+                    <input name="sourceOfFunding" asp-for="SacredEvent.SourceOfFunding" class="form-control" />
+                    <span asp-validation-for="SacredEvent.SourceOfFunding" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Сохранить" class="btn btn-primary" />
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <label asp-for="PriestId" class="control-label"></label>
-            <input asp-for="PriestId" class="form-control" />
-            <span asp-validation-for="PriestId" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="DivineService.Justification" class="control-label"></label>
-            <input name="justification" asp-for="DivineService.Justification" class="form-control" />
-            <span asp-validation-for="DivineService.Justification" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="DivineService.Prayer" class="control-label"></label>
-            <input name="prayer" asp-for="DivineService.Prayer" class="form-control" />
-            <span asp-validation-for="DivineService.Prayer" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
-    </form>
+    </div>
+    <div>
+        <a asp-action="Event">Back to List</a>
+    </div>
 }
 

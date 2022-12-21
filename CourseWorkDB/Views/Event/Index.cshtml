@@ -49,6 +49,10 @@
                     {
                         <a href="~/DataBase/AboutDivineService?id=@item.Id">Подробнее</a>
                     }
+                    @if (item.Type == "Священное событие")
+                    {
+                        <a href="~/DataBase/AboutSacredEvent?id=@item.Id">Подробнее</a>
+                    }
                 </th>
                 <th>
                     <input type="checkbox" id="@item.Id" onclick="Edit()">
@@ -62,7 +66,7 @@
        value="Добавить службу" />
     <input type="submit"
        name="button"
-       value="Добавить священное событыие" />
+       value="Добавить священное событие" />
     <input type="submit"
        name="button"
        value="Добавить деятельность" />

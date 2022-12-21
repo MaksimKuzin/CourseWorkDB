@@ -1,0 +1,75 @@
+﻿@model CourseWorkDB.DataBase.Event
+
+@{
+    ViewData["Title"] = "Священное событие";
+}
+
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PriestId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PriestId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SacredEvent.Place)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SacredEvent.Place)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SacredEvent.FinishDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SacredEvent.FinishDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SacredEvent.Transport)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SacredEvent.Transport)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SacredEvent.Route)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SacredEvent.Route)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SacredEvent.SourceOfFunding)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SacredEvent.SourceOfFunding)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Event">Back to List</a>
+</div>
