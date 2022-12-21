@@ -2,6 +2,8 @@
 using CourseWorkDB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Signing;
 using System.Diagnostics;
 
@@ -187,6 +189,8 @@ namespace CourseWorkDB.Controllers
         }
         public ActionResult DeleteParishioner(int id)
         {
+            SqlParameter parameter = new SqlParameter("@id", id);
+            db.Database.ExecuteSqlRaw("OnParishionerDelete @id", parameter);
             var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == id);
             db.Remove(parishioner);
             db.SaveChanges();

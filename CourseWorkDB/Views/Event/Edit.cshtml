@@ -1,5 +1,9 @@
 ﻿@model CourseWorkDB.DataBase.Event
 
+@{
+    ViewData["Title"] = "Изменить мероприятие";
+}
+
 @if (Model.Type == "Служба")
 {
     <form asp-action="EditEvent">
