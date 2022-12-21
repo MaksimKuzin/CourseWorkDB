@@ -105,4 +105,47 @@
         <a asp-action="Event">Back to List</a>
     </div>
 }
+@if (Model.Type == "Деятельность")
+{
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="EditEvent">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="hidden" name="type" value="@Model.Type" />
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Date" class="control-label"></label>
+                    <input asp-for="Date" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PriestId" class="control-label"></label>
+                    <input asp-for="PriestId" class="form-control" />
+                    <span asp-validation-for="PriestId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Activity.Duration" class="control-label"></label>
+                    <input name="duration" asp-for="Activity.Duration" class="form-control" />
+                    <span asp-validation-for="Activity.Duration" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Activity.ParishionerAmount" class="control-label"></label>
+                    <input name="amount" asp-for="Activity.ParishionerAmount" class="form-control" />
+                    <span asp-validation-for="Activity.ParishionerAmount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Сохранить" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div>
+        <a asp-action="Event">Back to List</a>
+    </div>
+}
 

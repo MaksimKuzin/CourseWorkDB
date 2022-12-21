@@ -1,0 +1,47 @@
+﻿@model CourseWorkDB.DataBase.Activity
+
+@{
+    ViewData["Title"] = "Добавить деятельность";
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateActivity">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Event.Name" class="control-label"></label>
+                <input name="name" asp-for="Event.Name" class="form-control" />
+                <span asp-validation-for="Event.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Event.Date" class="control-label"></label>
+                <input name="date" asp-for="Event.Date" class="form-control" />
+                <span asp-validation-for="Event.Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Event.PriestId" class="control-label"></label>
+                <input name="priestId" asp-for="Event.PriestId" class="form-control" />
+                <span asp-validation-for="Event.PriestId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Duration" class="control-label"></label>
+                <input asp-for="Duration" class="form-control" />
+                <span asp-validation-for="Duration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ParishionerAmount" class="control-label"></label>
+                <input asp-for="ParishionerAmount" class="form-control" />
+                <span asp-validation-for="ParishionerAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Добавить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Event">Назад к списку</a>
+</div>
+

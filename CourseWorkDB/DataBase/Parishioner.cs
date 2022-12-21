@@ -6,6 +6,7 @@ namespace CourseWorkDB.DataBase;
 
 public partial class Parishioner
 {
+    [DisplayName("Идентификатор прихожанина")]
     public int Id { get; set; }
     [DisplayName("Имя")]
     public string Name { get; set; } = null!;

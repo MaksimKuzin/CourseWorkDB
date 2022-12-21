@@ -1,7 +1,7 @@
 ﻿@model CourseWorkDB.DataBase.Event
 
 @{
-    ViewData["Title"] = "Священное событие";
+    ViewData["Title"] = "Деятельность";
 }
 
 
@@ -40,39 +40,21 @@
             @Html.DisplayFor(model => model.Priest.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SacredEvent.Place)
+            @Html.DisplayNameFor(model => model.Activity.Duration)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SacredEvent.Place)
+            @Html.DisplayFor(model => model.Activity.Duration)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SacredEvent.FinishDate)
+            @Html.DisplayNameFor(model => model.Activity.ParishionerAmount)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SacredEvent.FinishDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SacredEvent.Transport)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SacredEvent.Transport)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SacredEvent.Route)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SacredEvent.Route)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SacredEvent.SourceOfFunding)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SacredEvent.SourceOfFunding)
+            @Html.DisplayFor(model => model.Activity.ParishionerAmount)
         </dd>
         <dt class="col-sm-2">
             Список прихожан
         </dt>
-        <dd class="col-sm-10 "style="display:grid">
+        <dd class="col-sm-10 " style="display:grid">
             @foreach (var parishioner in Model.Parishioners)
             {
                 <label>@parishioner.Name      @parishioner.Surname</label>

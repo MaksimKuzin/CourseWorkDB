@@ -6,6 +6,7 @@ namespace CourseWorkDB.DataBase;
 
 public partial class SacredEvent
 {
+    [DisplayName("Идентификатор мероприятия")]
     public int EventId { get; set; }
     [DisplayName("Место проведения")]
     public string Place { get; set; } = null!;

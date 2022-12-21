@@ -19,6 +19,9 @@
     <table class="table">
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
@@ -35,6 +38,9 @@
         @foreach (var item in Model)
         {
             <tr>
+                                <th>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </th>
                 <th>
                     @Html.DisplayFor(modelItem => item.Name)
                 </th>
@@ -52,6 +58,10 @@
                     @if (item.Type == "Священное событие")
                     {
                         <a href="~/DataBase/AboutSacredEvent?id=@item.Id">Подробнее</a>
+                    }
+                    @if (item.Type == "Деятельность")
+                    {
+                        <a href="~/DataBase/AboutActivity?id=@item.Id">Подробнее</a>
                     }
                 </th>
                 <th>

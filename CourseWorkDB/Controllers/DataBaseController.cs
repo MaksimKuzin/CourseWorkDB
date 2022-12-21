@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Signing;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 using static Azure.Core.HttpHeader;
@@ -160,6 +161,11 @@ namespace CourseWorkDB.Controllers
             db.Parishioners.Add(parishioner);
             db.SaveChanges();
             IEnumerable<Parishioner> model = db.Parishioners;
+            foreach (var parish in model)
+            {
+                var prst = db.Priests.SingleOrDefault(p => p.Id == parish.PriestId);
+                parish.Priest = prst;
+            }
             return View("../Parishioner/Index", model);
         }
         [HttpGet]
@@ -193,6 +199,11 @@ namespace CourseWorkDB.Controllers
             db.Priests.Update(priest);
             db.SaveChanges();
             IEnumerable<Parishioner> model = db.Parishioners.AsEnumerable();
+            foreach (var parish in model)
+            {
+                var prst = db.Priests.SingleOrDefault(p => p.Id == parish.PriestId);
+                parish.Priest = prst;
+            }
             return View("../Parishioner/Index", model);
         }
         public ActionResult DeleteParishioner(int id)
@@ -203,6 +214,11 @@ namespace CourseWorkDB.Controllers
             db.Remove(parishioner);
             db.SaveChanges();
             IEnumerable<Parishioner> model = db.Parishioners;
+            foreach (var parish in model)
+            {
+                var prst = db.Priests.SingleOrDefault(p => p.Id == parish.PriestId);
+                parish.Priest = prst;
+            }
             return View("../Parishioner/Index", model);
         }
         public ActionResult Event()
@@ -218,6 +234,8 @@ namespace CourseWorkDB.Controllers
                     return CreateDivineService();
                 case "Добавить священное событие":
                     return CreateSacredEvent();
+                case "Добавить деятельность":
+                    return CreateActivity();
                 case "Редактировать мероприятие":
                     return EditEvent(ids);
                 case "Удалить мероприятие":
@@ -269,6 +287,8 @@ namespace CourseWorkDB.Controllers
                 var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == pId);
                 model.Parishioners.Add(parishioner);
             }
+            var priest = db.Priests.SingleOrDefault(p => p.Id == model.PriestId);
+            model.Priest = priest;
             return View("../DivineService/Index", model);
         }
         [HttpGet]
@@ -317,7 +337,56 @@ namespace CourseWorkDB.Controllers
                 var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == pId);
                 model.Parishioners.Add(parishioner);
             }
+            var priest = db.Priests.SingleOrDefault(p => p.Id == model.PriestId);
+            model.Priest = priest;
             return View("../SacredEvent/Index", model);
+        }
+        [HttpGet]
+        public ActionResult CreateActivity()
+        {
+            return View("../Activity/Create");
+        }
+        [HttpPost]
+        public ActionResult CreateActivity(string name, DateTime date, int priestId, short duration, short parishionerAmount)
+        {
+            var @event = new Event
+            {
+                Name = name,
+                Date = date,
+                PriestId = priestId,
+                Type = "Деятельность"
+            };
+            db.Events.Add(@event);
+            db.SaveChanges();
+            int maxId = db.Events.Max(e => e.Id);
+            @event = db.Events.SingleOrDefault(e => e.Id == maxId);
+            var activity = new DataBase.Activity
+            {
+                EventId = maxId,
+                Event = @event,
+                ParishionerAmount = parishionerAmount,
+                Duration = duration
+            };
+            db.Activities.Add(activity);
+            db.SaveChanges();
+            var model = db.Events;
+            return View("../Event/Index", model);
+        }
+        public ActionResult AboutActivity(int id)
+        {
+            var model = db.Events.SingleOrDefault(e => e.Id == id);
+            var activity = db.Activities.SingleOrDefault(e => e.EventId == id);
+            model.Activity = activity;
+            SqlParameter parameter = new SqlParameter("@eId", id);
+            var parishionerId = db.Database.SqlQueryRaw<int>("SELECT ParishionerId FROM ParishionerEvent WHERE EventId = @eId", parameter).AsEnumerable().ToList();
+            foreach (int pId in parishionerId)
+            {
+                var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == pId);
+                model.Parishioners.Add(parishioner);
+            }
+            var priest = db.Priests.SingleOrDefault(p => p.Id == model.PriestId);
+            model.Priest = priest;
+            return View("../Activity/Index", model);
         }
         [HttpGet]
         public ActionResult EditEvent(int id)
@@ -329,10 +398,13 @@ namespace CourseWorkDB.Controllers
             var sEvent = db.SacredEvents.SingleOrDefault(e => e.EventId == id);
             if (sEvent != null)
                 model.SacredEvent = sEvent;
+            var activity = db.Activities.SingleOrDefault(e => e.EventId == id);
+            if (activity != null)
+                model.Activity = activity;
             return View("../Event/Edit", model);
         }
         [HttpPost]
-        public ActionResult EditEvent(int id, string name, DateTime date, int priestId, string justification, string prayer, string place, DateTime finishDate, string transport, string route, string sourceOfFunding)
+        public ActionResult EditEvent(int id, string name, DateTime date, int priestId, string justification, string prayer, string place, DateTime finishDate, string transport, string route, string sourceOfFunding,short duration, short amount)
         {
             var @event = db.Events.SingleOrDefault(e => e.Id == id);
             @event.Name = name;
@@ -359,6 +431,15 @@ namespace CourseWorkDB.Controllers
                 db.SacredEvents.Update(sEvent);
                 db.SaveChanges();
             }
+            var activity = db.Activities.SingleOrDefault(e => e.EventId == id);
+            if(activity != null)
+            {
+                activity.Duration = duration;
+                activity.ParishionerAmount = amount;
+                db.Events.Update(@event);
+                db.Activities.Update(activity);
+                db.SaveChanges();
+            }
             var model = db.Events;
             return View("../Event/Index", model);
         }
@@ -369,13 +450,23 @@ namespace CourseWorkDB.Controllers
             db.SaveChanges();
             var model = db.Events;
             return View("../Event/Index", model);
-        }
+        } 
         [HttpGet]
         public ActionResult AddParishionersToEvent(int id)
         {
             tempEventId = id;
-            IEnumerable<Parishioner> model = db.Parishioners;
-            return View("../Event/AddParishioner", model);
+            IEnumerable<Parishioner> parishioners = db.Parishioners;
+            SqlParameter parameter = new SqlParameter("@eId", id);
+            var parishionerId = db.Database.SqlQueryRaw<int>("SELECT ParishionerId FROM ParishionerEvent WHERE EventId = @eId", parameter).AsEnumerable().ToList();
+            List<Parishioner> model = new();
+            foreach(var parishioner in parishioners)
+            {
+                if (!parishionerId.Contains(parishioner.Id))
+                {
+                    model.Add(parishioner);
+                }
+            }
+            return View("../Event/AddParishioner", model.AsEnumerable());
         }
         [HttpPost]
         public ActionResult AddParishionersToEvent(string ids)
@@ -386,6 +477,36 @@ namespace CourseWorkDB.Controllers
                 SqlParameter parameter = new SqlParameter("@pId", id);
                 SqlParameter parameter1 = new SqlParameter("@eId", tempEventId);
                 db.Database.ExecuteSqlRaw("AddParishionerEvent @pId , @eId", parameter, parameter1);
+            }
+            tempEventId = 0;
+            IEnumerable<Event> model = db.Events;
+            return View("../Event/Index", model);
+        }
+        [HttpGet]
+        public ActionResult DeleteParishionerFromEvent(int id)
+        {
+            tempEventId = id;
+            IEnumerable<Parishioner> parishioners = db.Parishioners;
+            SqlParameter parameter = new SqlParameter("@eId", id);
+            var parishionerId = db.Database.SqlQueryRaw<int>("SELECT ParishionerId FROM ParishionerEvent WHERE EventId = @eId", parameter).AsEnumerable().ToList();
+            List<Parishioner> model = new();
+            foreach (var parishioner in parishioners)
+            {
+                if (parishionerId.Contains(parishioner.Id))
+                {
+                    model.Add(parishioner);
+                }
+            }
+            return View("../Event/DelParishioner", model.AsEnumerable());
+        }
+        public ActionResult DeleteParishionerFromEvent(string ids)
+        {
+            List<string> idList = ids.Split(';').ToList();
+            foreach (var id in idList)
+            {
+                SqlParameter parameter = new SqlParameter("@pId", id);
+                SqlParameter parameter1 = new SqlParameter("@eId", tempEventId);
+                db.Database.ExecuteSqlRaw("DeleteParishionerEvent @pId , @eId", parameter, parameter1);
             }
             tempEventId = 0;
             IEnumerable<Event> model = db.Events;

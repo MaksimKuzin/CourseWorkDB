@@ -6,6 +6,7 @@ namespace CourseWorkDB.DataBase;
 
 public partial class Inventory
 {
+    [DisplayName("Идентификатор инвентаря")]
     public int Id { get; set; }
     [DisplayName("Название")]
     public string Name { get; set; } = null!;

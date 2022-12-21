@@ -6,6 +6,7 @@ namespace CourseWorkDB.DataBase;
 
 public partial class Event
 {
+    [DisplayName("Идентификатор мероприятия")]
     public int Id { get; set; }
     [DisplayName("Название")]
     public string Name { get; set; } = null!;

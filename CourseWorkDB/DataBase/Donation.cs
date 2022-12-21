@@ -6,6 +6,7 @@ namespace CourseWorkDB.DataBase;
 
 public partial class Donation
 {
+    [DisplayName("Идентификатор пожертвования")]
     public int Id { get; set; }
     [DisplayName("Сумма")]
     public decimal Sum { get; set; }

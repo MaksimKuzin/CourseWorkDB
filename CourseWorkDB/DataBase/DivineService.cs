@@ -6,6 +6,7 @@ namespace CourseWorkDB.DataBase;
 
 public partial class DivineService
 {
+    [DisplayName("Идентификатор мероприятия")]
     public int EventId { get; set; }
     [DisplayName("Обоснование")]
     public string? Justification { get; set; }

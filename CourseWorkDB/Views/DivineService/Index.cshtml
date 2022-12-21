@@ -33,10 +33,11 @@
             @Html.DisplayFor(model => model.Type)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PriestId)
+            Ответственный священнослужитель
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PriestId)
+            @Html.DisplayFor(model => model.Priest.Title)
+            @Html.DisplayFor(model => model.Priest.Name)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DivineService.Justification)
@@ -65,4 +66,5 @@
     <a asp-action="Event">Назад к списку</a>
     <a href="~/DataBase/EditEvent?id=@Model.Id">Редактировать</a>
     <a href="~/DataBase/AddParishionersToEvent?id=@Model.Id">Добавать прихожан</a>
+    <a href="~/DataBase/DeleteParishionerFromEvent?id=@Model.Id">Удалить прихожан</a>
 </div>

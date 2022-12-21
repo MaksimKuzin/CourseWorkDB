@@ -1,66 +1,72 @@
 ﻿@model IEnumerable<CourseWorkDB.DataBase.Priest>
 @{
-	ViewData["Title"] = "Священнослужители";
+    ViewData["Title"] = "Священнослужители";
 }
 
 <script type="text/javascript">
-	function Edit() {
-		var chkd = document.querySelectorAll('input:checked');
-		var id = chkd[0].getAttribute("id");
-		var hidden = document.getElementsByName('ids')[0];
-		hidden.value = id;
-	}
+    function Edit() {
+        var chkd = document.querySelectorAll('input:checked');
+        var id = chkd[0].getAttribute("id");
+        var hidden = document.getElementsByName('ids')[0];
+        hidden.value = id;
+    }
 </script>
 
 
 @using (Html.BeginForm("PriestActions", "DataBase", FormMethod.Get))
 {
-	<input type="hidden" name="ids" value="" />
-	<table class="table">
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.Title)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Name)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.InitialDate)
-			</th>
-			<th>
-				Список прихожан
-			</th>
-			<th></th>
-		</tr>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<th>
-					@Html.DisplayFor(modelItem => item.Title)
-				</th>
-				<th>
-					@Html.DisplayFor(modelItem => item.Name)
-				</th>
-				<th>
-					@Html.DisplayFor(modelItem => item.InitialDate.Date)
-				</th>
-				<th>
-					<a href="~/DataBase/ParishionerByPriestId?priestId=@item.Id">Список</a>
-				</th>
-				<th>
-					<input type="checkbox" id="@item.Id" onclick="Edit()">
-				</th>
-				<th></th>
-			</tr>
-		}
-	</table>
-	<input type="submit"
-	   name="button"
-	   value="Добавить священнослужителя" />
-	<input type="submit"
-	   name="button"
-	   value="Редактировать священнослужителя" />
-	<input type="submit"
-	   name="button"
-	   value="Удалить священнослужителя" />
+    <input type="hidden" name="ids" value="" />
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InitialDate)
+            </th>
+            <th>
+                Список прихожан
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.InitialDate.Date)
+                </th>
+                <th>
+                    <a href="~/DataBase/ParishionerByPriestId?priestId=@item.Id">Список</a>
+                </th>
+                <th>
+                    <input type="checkbox" id="@item.Id" onclick="Edit()">
+                </th>
+                <th></th>
+            </tr>
+        }
+    </table>
+    <input type="submit"
+       name="button"
+       value="Добавить священнослужителя" />
+    <input type="submit"
+       name="button"
+       value="Редактировать священнослужителя" />
+    <input type="submit"
+       name="button"
+       value="Удалить священнослужителя" />
 }

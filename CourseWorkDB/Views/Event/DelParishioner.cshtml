@@ -6,20 +6,22 @@
     function Edit() {
         var chkd = document.querySelectorAll('input:checked');
         var id = chkd[0].getAttribute("id");
+        let list = [];
+        for (let i = 0; i < chkd.length; i++) {
+            list[i] = chkd[i].getAttribute("id");
+        }
+        list = list.join(';');
         var hidden = document.getElementsByName('ids')[0];
-        hidden.value = id;
+        hidden.value = list;
     }
 </script>
 
 
-@using (Html.BeginForm("ParishionerActions", "DataBase", FormMethod.Get))
+@using (Html.BeginForm("DeleteParishionerFromEvent", "DataBase", FormMethod.Post))
 {
     <input type="hidden" name="ids" value="" />
     <table class="table">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -41,17 +43,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
-            <th>
-                Священнослужитель
-            </th>
             <th></th>
         </tr>
         @foreach (var item in Model)
         {
             <tr>
-                <th>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </th>
                 <th>
                     @Html.DisplayFor(modelItem => item.Name)
                 </th>
@@ -81,10 +77,6 @@
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </th>
                 <th>
-                    @Html.DisplayFor(modelItem => item.Priest.Title)
-                    @Html.DisplayFor(modelItem => item.Priest.Name)
-                </th>
-                <th>
                     <input type="checkbox" id="@item.Id" onclick="Edit()">
                 </th>
                 <th></th>
@@ -93,11 +85,5 @@
     </table>
     <input type="submit"
        name="button"
-       value="Добавить прихожанина" />
-    <input type="submit"
-       name="button"
-       value="Редактировать прихожанина" />
-    <input type="submit"
-       name="button"
-       value="Удалить прихожанина" />
+       value="Удалить" />
 }

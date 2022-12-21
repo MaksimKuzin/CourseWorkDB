@@ -6,6 +6,7 @@ namespace CourseWorkDB.DataBase;
 
 public partial class Activity
 {
+    [DisplayName("Идентификатор мероприятия")]
     public int EventId { get; set; }
     [DisplayName("Продолжительность")]
     public short? Duration { get; set; }
