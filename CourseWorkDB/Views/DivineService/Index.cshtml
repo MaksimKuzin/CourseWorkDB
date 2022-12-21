@@ -50,8 +50,19 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DivineService.Prayer)
         </dd>
+        <dt class="col-sm-2">
+            Список прихожан
+        </dt>
+        <dd class="col-sm-10" style="display:grid">
+            @foreach (var parishioner in Model.Parishioners)
+            {
+                <label>@parishioner.Name      @parishioner.Surname</label>
+            }
+        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Event">Back to List</a>
+    <a asp-action="Event">Назад к списку</a>
+    <a href="~/DataBase/EditEvent?id=@Model.Id">Редактировать</a>
+    <a href="~/DataBase/AddParishionersToEvent?id=@Model.Id">Добавать прихожан</a>
 </div>

@@ -1,0 +1,90 @@
+﻿@model IEnumerable<CourseWorkDB.DataBase.Parishioner>
+@{
+    ViewData["Title"] = "Прихожане";
+}
+<script type="text/javascript">
+    function Edit() {
+        var chkd = document.querySelectorAll('input:checked');
+        var id = chkd[0].getAttribute("id");
+        let list = [];
+        for (let i = 0; i < chkd.length; i++) 
+        {
+            list[i] = chkd[i].getAttribute("id");
+        }
+        list=list.join(';');
+        var hidden = document.getElementsByName('ids')[0];
+        hidden.value = list;
+    }
+</script>
+
+
+@using (Html.BeginForm("AddParishionersToEvent", "DataBase", FormMethod.Post))
+{
+    <input type="hidden" name="ids" value="" />
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Surname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Patronymic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sex)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Patronymic)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Age)
+                </th>
+                <th>
+                    @if (item.Sex == true)
+                    {
+                        <label>Мужчина</label>
+                    }
+                    else
+                    {
+                        <label>Женщина</label>
+                    }
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </th>
+                <th>
+                    <input type="checkbox" id="@item.Id" onclick="Edit()">
+                </th>
+                <th></th>
+            </tr>
+        }
+    </table>
+    <input type="submit"
+       name="button"
+       value="Добавить" />
+}

@@ -6,6 +6,8 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Signing;
 using System.Diagnostics;
+using System.Reflection.Metadata;
+using static Azure.Core.HttpHeader;
 
 namespace CourseWorkDB.Controllers
 {
@@ -14,6 +16,7 @@ namespace CourseWorkDB.Controllers
     {
         private readonly ILogger<DataBaseController> _logger;
         private ChurchParishCourseWorkContext db;
+        public static int tempEventId;
         public DataBaseController(ILogger<DataBaseController> logger, ChurchParishCourseWorkContext context)
         {
             _logger = logger;
@@ -98,16 +101,21 @@ namespace CourseWorkDB.Controllers
         public ActionResult Parishioner()
         {
             IEnumerable<Parishioner> model = db.Parishioners;
-            //foreach(var parishioner in model)
-            //{
-            //    var priest = db.Priests.SingleOrDefault(p => p.Id == parishioner.PriestId);
-            //    parishioner.Priest = priest;
-            //}
+            foreach (var parishioner in model)
+            {
+                var priest = db.Priests.SingleOrDefault(p => p.Id == parishioner.PriestId);
+                parishioner.Priest = priest;
+            }
             return View("../Parishioner/Index", model);
         }
         public ActionResult ParishionerByPriestId(int priestId)
         {
             IEnumerable<Parishioner> model = db.Parishioners.Where(p => p.PriestId == priestId);
+            foreach (var parishioner in model)
+            {
+                var priest = db.Priests.SingleOrDefault(p => p.Id == parishioner.PriestId);
+                parishioner.Priest = priest;
+            }
             return View("../Parishioner/Index", model);
         }
         public ActionResult ParishionerActions(string button, int ids)
@@ -254,6 +262,13 @@ namespace CourseWorkDB.Controllers
             var model = db.Events.SingleOrDefault(e => e.Id == id);
             var divineService = db.DivineServices.SingleOrDefault(e => e.EventId == id);
             model.DivineService = divineService;
+            SqlParameter parameter = new SqlParameter("@eId",id);
+            var parishionerId = db.Database.SqlQueryRaw<int>("SELECT ParishionerId FROM ParishionerEvent WHERE EventId = @eId",parameter).AsEnumerable().ToList();
+            foreach(int pId in parishionerId)
+            {
+                var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == pId);
+                model.Parishioners.Add(parishioner);
+            }
             return View("../DivineService/Index", model);
         }
         [HttpGet]
@@ -262,7 +277,7 @@ namespace CourseWorkDB.Controllers
             return View("../SacredEvent/Create");
         }
         [HttpPost]
-        public ActionResult CreateSacredEvent(string name, DateTime date, int priestId, string place, DateTime finishDate, string transport, string route,string sourceOfFunding)
+        public ActionResult CreateSacredEvent(string name, DateTime date, int priestId, string place, DateTime finishDate, string transport, string route, string sourceOfFunding)
         {
             var @event = new Event
             {
@@ -295,19 +310,26 @@ namespace CourseWorkDB.Controllers
             var model = db.Events.SingleOrDefault(e => e.Id == id);
             var sEvent = db.SacredEvents.SingleOrDefault(e => e.EventId == id);
             model.SacredEvent = sEvent;
+            SqlParameter parameter = new SqlParameter("@eId", id);
+            var parishionerId = db.Database.SqlQueryRaw<int>("SELECT ParishionerId FROM ParishionerEvent WHERE EventId = @eId", parameter).AsEnumerable().ToList();
+            foreach (int pId in parishionerId)
+            {
+                var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == pId);
+                model.Parishioners.Add(parishioner);
+            }
             return View("../SacredEvent/Index", model);
         }
         [HttpGet]
         public ActionResult EditEvent(int id)
         {
-            var model = db.Events.SingleOrDefault(e=>e.Id==id);
+            var model = db.Events.SingleOrDefault(e => e.Id == id);
             var divineService = db.DivineServices.SingleOrDefault(e => e.EventId == id);
             if (divineService != null)
                 model.DivineService = divineService;
             var sEvent = db.SacredEvents.SingleOrDefault(e => e.EventId == id);
             if (sEvent != null)
                 model.SacredEvent = sEvent;
-            return View("../Event/Edit",model);
+            return View("../Event/Edit", model);
         }
         [HttpPost]
         public ActionResult EditEvent(int id, string name, DateTime date, int priestId, string justification, string prayer, string place, DateTime finishDate, string transport, string route, string sourceOfFunding)
@@ -326,7 +348,7 @@ namespace CourseWorkDB.Controllers
                 db.SaveChanges();
             }
             var sEvent = db.SacredEvents.SingleOrDefault(e => e.EventId == id);
-            if(sEvent != null)
+            if (sEvent != null)
             {
                 sEvent.Place = place;
                 sEvent.FinishDate = finishDate;
@@ -346,6 +368,27 @@ namespace CourseWorkDB.Controllers
             db.Remove(@event);
             db.SaveChanges();
             var model = db.Events;
+            return View("../Event/Index", model);
+        }
+        [HttpGet]
+        public ActionResult AddParishionersToEvent(int id)
+        {
+            tempEventId = id;
+            IEnumerable<Parishioner> model = db.Parishioners;
+            return View("../Event/AddParishioner", model);
+        }
+        [HttpPost]
+        public ActionResult AddParishionersToEvent(string ids)
+        {
+            List<string> idList = ids.Split(';').ToList();
+            foreach (var id in idList)
+            {
+                SqlParameter parameter = new SqlParameter("@pId", id);
+                SqlParameter parameter1 = new SqlParameter("@eId", tempEventId);
+                db.Database.ExecuteSqlRaw("AddParishionerEvent @pId , @eId", parameter, parameter1);
+            }
+            tempEventId = 0;
+            IEnumerable<Event> model = db.Events;
             return View("../Event/Index", model);
         }
         public IActionResult Privacy()
