@@ -9,6 +9,14 @@
         var id = chkd[0].getAttribute("id");
         var hidden = document.getElementsByName('ids')[0];
         hidden.value = id;
+        if (chkd.length > 1) {
+            document.getElementById('editBtn').disabled = true;
+            document.getElementById('delBtn').disabled = true;
+        }
+        else{
+            document.getElementById('editBtn').disabled = false;
+            document.getElementById('delBtn').disabled = false;
+        }
     }
 </script>
 
@@ -64,9 +72,9 @@
        name="button"
        value="Добавить священнослужителя" />
     <input type="submit"
-       name="button"
+       name="button" id="editBtn"
        value="Редактировать священнослужителя" />
     <input type="submit"
-       name="button"
+       name="button" id="delBtn"
        value="Удалить священнослужителя" />
 }
