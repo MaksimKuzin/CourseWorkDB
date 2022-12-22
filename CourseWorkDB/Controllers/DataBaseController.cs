@@ -606,11 +606,106 @@ namespace CourseWorkDB.Controllers
             }
             return View("../Donation/Index", model);
         }
+        public ActionResult Inventory()
+        {
+            IEnumerable<Inventory> model = db.Inventories;
+            foreach(var item in model)
+            {
+                var @event = db.Events.SingleOrDefault(e=>e.Id==item.EventId);
+                item.Event = @event;
+            }
+            return View("../Inventory/Index", model);
+        }
+        public ActionResult InventoryActions(string button, int ids)
+        {
+            switch (button)
+            {
+                case "Добавить инвентарь":
+                    return CreateInventory();
+                case "Редактировать инвентарь":
+                    return EditInventory(ids);
+                case "Удалить инвентарь":
+                    return DeleteInventory(ids);
+                default:
+                    return null;
+            }
+        }
+        [HttpGet]
+        public ActionResult CreateInventory()
+        {
+            return View("../Inventory/Create");
+        }
+        [HttpPost]
+        public ActionResult CreateInventory(string name, decimal price, DateTime dateOfpurchase, int eventId)
+        {
+            var inventory = new Inventory
+            {
+                Name = name,
+                Price = price,
+                DateOfPurchase = dateOfpurchase,
+                EventId = eventId
+            };
+            db.Inventories.Add(inventory);
+            db.SaveChanges();
+            IEnumerable<Inventory> model = db.Inventories;
+            foreach (var item in model)
+            {
+                var @event = db.Events.SingleOrDefault(e => e.Id == item.EventId);
+                item.Event = @event;
+            }
+            return View("../Inventory/Index",model);
+        }
+        [HttpGet]
+        public ActionResult EditInventory(int id)
+        {
+            var model = db.Inventories.SingleOrDefault(i => i.Id == id);
+            return View("../Inventory/Edit", model);
+        }
+        [HttpPost]
+        public ActionResult EditInventory(int id, string name, decimal price, DateTime dateOfpurchase, int eventId)
+        {
+            var inventory = db.Inventories.SingleOrDefault(i => i.Id == id);
+            inventory.Name = name;
+            inventory.Price = price;
+            inventory.DateOfPurchase = dateOfpurchase;
+            inventory.EventId = eventId;
+            db.Inventories.Update(inventory);
+            db.SaveChanges();
+            IEnumerable<Inventory> model = db.Inventories;
+            foreach (var item in model)
+            {
+                var @event = db.Events.SingleOrDefault(e => e.Id == item.EventId);
+                item.Event = @event;
+            }
+            return View("../Inventory/Index", model);
+        }
+        public ActionResult DeleteInventory(int id)
+        {
+            var inventory = db.Inventories.SingleOrDefault(i => i.Id == id);
+            db.Inventories.Remove(inventory);
+            db.SaveChanges();
+            IEnumerable<Inventory> model = db.Inventories;
+            foreach (var item in model)
+            {
+                var @event = db.Events.SingleOrDefault(e => e.Id == item.EventId);
+                item.Event = @event;
+            }
+            return View("../Inventory/Index", model);
+        }
+        public ActionResult InventoryByEventId(int eventId)
+        {
+            IEnumerable<Inventory> model = db.Inventories.Where(i => i.EventId == eventId);
+            foreach (var item in model)
+            {
+                var @event = db.Events.SingleOrDefault(e => e.Id == item.EventId);
+                item.Event = @event;
+            }
+            return View("../Inventory/Index", model);
+        }
         public IActionResult Privacy()
         {
             return View("Privacy");
         }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

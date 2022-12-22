@@ -14,7 +14,7 @@ public partial class Inventory
     public decimal Price { get; set; }
     [DisplayName("Дата приобретения")]
     public DateTime DateOfPurchase { get; set; }
-
+    [DisplayName("Идентификатор мероприятия")]
     public int EventId { get; set; }
 
     public virtual Event Event { get; set; } = null!;

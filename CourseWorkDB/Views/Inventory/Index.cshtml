@@ -1,8 +1,7 @@
-﻿@model IEnumerable<CourseWorkDB.DataBase.Event>
+﻿@model IEnumerable<CourseWorkDB.DataBase.Inventory>
 @{
-    ViewData["Title"] = "Мероприятия";
+    ViewData["Title"] = "Инвентарь";
 }
-
 <script type="text/javascript">
     function Edit() {
         var chkd = document.querySelectorAll('input:checked');
@@ -21,7 +20,7 @@
 </script>
 
 
-@using (Html.BeginForm("EventActions", "DataBase", FormMethod.Get))
+@using (Html.BeginForm("InventoryActions", "DataBase", FormMethod.Get))
 {
     <input type="hidden" name="ids" value="" />
     <table class="table">
@@ -33,16 +32,13 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Type)
+                @Html.DisplayNameFor(model => model.DateOfPurchase)
             </th>
             <th>
-                Список инвентаря
-            </th>
-            <th>
-                Дополнительная информация
+                Мероприятие
             </th>
             <th></th>
         </tr>
@@ -56,27 +52,13 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </th>
                 <th>
-                    @Html.DisplayFor(modelItem => item.Date)
+                    @Html.DisplayFor(modelItem => item.Price)
                 </th>
                 <th>
-                    @Html.DisplayFor(modelItem => item.Type)
-                </th>
+                    @Html.DisplayFor(modelItem => item.DateOfPurchase)
+                </th>                
                 <th>
-                    <a href="~/DataBase/InventoryByEventId?eventId=@item.Id">Список</a>
-                </th>
-                <th>
-                    @if (item.Type == "Служба")
-                    {
-                        <a href="~/DataBase/AboutDivineService?id=@item.Id">Подробнее</a>
-                    }
-                    @if (item.Type == "Священное событие")
-                    {
-                        <a href="~/DataBase/AboutSacredEvent?id=@item.Id">Подробнее</a>
-                    }
-                    @if (item.Type == "Деятельность")
-                    {
-                        <a href="~/DataBase/AboutActivity?id=@item.Id">Подробнее</a>
-                    }
+                    @Html.DisplayFor(modelItem => item.Event.Name)
                 </th>
                 <th>
                     <input type="checkbox" id="@item.Id" onclick="Edit()">
@@ -87,17 +69,11 @@
     </table>
     <input type="submit"
        name="button"
-       value="Добавить службу" />
-    <input type="submit"
-       name="button"
-       value="Добавить священное событие" />
-    <input type="submit"
-       name="button"
-       value="Добавить деятельность" />
+       value="Добавить инвентарь" />
     <input type="submit"
        name="button" id="editBtn"
-       value="Редактировать мероприятие" />
+       value="Редактировать инвентарь" />
     <input type="submit"
        name="button" id="delBtn"
-       value="Удалить мероприятие" />
+       value="Удалить инвентарь" />
 }
