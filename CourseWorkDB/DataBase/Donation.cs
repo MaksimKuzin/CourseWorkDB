@@ -12,6 +12,7 @@ public partial class Donation
     public decimal Sum { get; set; }
     [DisplayName("Цель трат")]
     public string Purpose { get; set; } = null!;
+    [DisplayName("Идентификатор прихожанина")]
     public int ParishionerId { get; set; }
 
     public virtual Parishioner Parishioner { get; set; } = null!;

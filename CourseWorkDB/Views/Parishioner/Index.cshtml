@@ -52,6 +52,9 @@
             <th>
                 Священнослужитель
             </th>
+            <th>
+                Список пожертвований
+            </th>
             <th></th>
         </tr>
         @foreach (var item in Model)
@@ -91,6 +94,9 @@
                 <th>
                     @Html.DisplayFor(modelItem => item.Priest.Title)
                     @Html.DisplayFor(modelItem => item.Priest.Name)
+                </th>
+                <th>
+                    <a href="~/DataBase/DonationByParishionerId?parishionerId=@item.Id">Список</a>
                 </th>
                 <th>
                     <input type="checkbox" id="@item.Id" onclick="Edit()">

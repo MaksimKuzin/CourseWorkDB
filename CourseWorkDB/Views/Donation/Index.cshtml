@@ -1,0 +1,76 @@
+﻿@model IEnumerable<CourseWorkDB.DataBase.Donation>
+@{
+    ViewData["Title"] = "Священнослужители";
+}
+
+<script type="text/javascript">
+    function Edit() {
+        var chkd = document.querySelectorAll('input:checked');
+        var id = chkd[0].getAttribute("id");
+        var hidden = document.getElementsByName('ids')[0];
+        hidden.value = id;
+        if (chkd.length > 1) {
+            document.getElementById('editBtn').disabled = true;
+            document.getElementById('delBtn').disabled = true;
+        }
+        else {
+            document.getElementById('editBtn').disabled = false;
+            document.getElementById('delBtn').disabled = false;
+        }
+    }
+</script>
+
+
+@using (Html.BeginForm("DonationActions", "DataBase", FormMethod.Get))
+{
+    <input type="hidden" name="ids" value="" />
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Purpose)
+            </th>
+            <th>
+                Прихожанин
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Sum)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Purpose)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Parishioner.Name)
+                    @Html.DisplayFor(modelItem => item.Parishioner.Surname)
+                </th>
+                <th>
+                    <input type="checkbox" id="@item.Id" onclick="Edit()">
+                </th>
+                <th></th>
+            </tr>
+        }
+    </table>
+    <input type="submit"
+       name="button"
+       value="Добавить пожертвование" />
+    <input type="submit"
+       name="button" id="editBtn"
+       value="Редактировать пожертвование" />
+    <input type="submit"
+       name="button" id="delBtn"
+       value="Удалить пожертвование" />
+}
+

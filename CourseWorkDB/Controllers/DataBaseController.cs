@@ -280,9 +280,9 @@ namespace CourseWorkDB.Controllers
             var model = db.Events.SingleOrDefault(e => e.Id == id);
             var divineService = db.DivineServices.SingleOrDefault(e => e.EventId == id);
             model.DivineService = divineService;
-            SqlParameter parameter = new SqlParameter("@eId",id);
-            var parishionerId = db.Database.SqlQueryRaw<int>("SELECT ParishionerId FROM ParishionerEvent WHERE EventId = @eId",parameter).AsEnumerable().ToList();
-            foreach(int pId in parishionerId)
+            SqlParameter parameter = new SqlParameter("@eId", id);
+            var parishionerId = db.Database.SqlQueryRaw<int>("SELECT ParishionerId FROM ParishionerEvent WHERE EventId = @eId", parameter).AsEnumerable().ToList();
+            foreach (int pId in parishionerId)
             {
                 var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == pId);
                 model.Parishioners.Add(parishioner);
@@ -404,7 +404,7 @@ namespace CourseWorkDB.Controllers
             return View("../Event/Edit", model);
         }
         [HttpPost]
-        public ActionResult EditEvent(int id, string name, DateTime date, int priestId, string justification, string prayer, string place, DateTime finishDate, string transport, string route, string sourceOfFunding,short duration, short amount)
+        public ActionResult EditEvent(int id, string name, DateTime date, int priestId, string justification, string prayer, string place, DateTime finishDate, string transport, string route, string sourceOfFunding, short duration, short amount)
         {
             var @event = db.Events.SingleOrDefault(e => e.Id == id);
             @event.Name = name;
@@ -432,7 +432,7 @@ namespace CourseWorkDB.Controllers
                 db.SaveChanges();
             }
             var activity = db.Activities.SingleOrDefault(e => e.EventId == id);
-            if(activity != null)
+            if (activity != null)
             {
                 activity.Duration = duration;
                 activity.ParishionerAmount = amount;
@@ -450,7 +450,7 @@ namespace CourseWorkDB.Controllers
             db.SaveChanges();
             var model = db.Events;
             return View("../Event/Index", model);
-        } 
+        }
         [HttpGet]
         public ActionResult AddParishionersToEvent(int id)
         {
@@ -459,7 +459,7 @@ namespace CourseWorkDB.Controllers
             SqlParameter parameter = new SqlParameter("@eId", id);
             var parishionerId = db.Database.SqlQueryRaw<int>("SELECT ParishionerId FROM ParishionerEvent WHERE EventId = @eId", parameter).AsEnumerable().ToList();
             List<Parishioner> model = new();
-            foreach(var parishioner in parishioners)
+            foreach (var parishioner in parishioners)
             {
                 if (!parishionerId.Contains(parishioner.Id))
                 {
@@ -511,6 +511,100 @@ namespace CourseWorkDB.Controllers
             tempEventId = 0;
             IEnumerable<Event> model = db.Events;
             return View("../Event/Index", model);
+        }
+        public ActionResult Donation()
+        {
+            IEnumerable<Donation> model = db.Donations;
+            foreach (var item in model)
+            {
+                var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == item.ParishionerId);
+                item.Parishioner = parishioner;
+            }
+            return View("../Donation/Index", model);
+        }
+        public ActionResult DonationActions(string button, int ids)
+        {
+            switch (button)
+            {
+                case "Добавить пожертвование":
+                    return CreateDonation();
+                case "Редактировать пожертвование":
+                    return EditDonation(ids);
+                case "Удалить пожертвование":
+                    return DeleteDonation(ids);
+                default:
+                    return null;
+            }
+        }
+        [HttpGet]
+        public ActionResult CreateDonation()
+        {
+            return View("../Donation/Create");
+        }
+        [HttpPost]
+        public ActionResult CreateDonation(string purpose, decimal sum, int parishionerId)
+        {
+            var donation = new Donation
+            {
+                Purpose = purpose,
+                Sum = sum,
+                ParishionerId = parishionerId
+            };
+            db.Donations.Add(donation);
+            db.SaveChanges();
+            IEnumerable<Donation> model = db.Donations;
+            foreach (var item in model)
+            {
+                var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == item.ParishionerId);
+                item.Parishioner = parishioner;
+            }
+            return View("../Donation/Index", model);
+        }
+        [HttpGet]
+        public ActionResult EditDonation(int id)
+        {
+            var model = db.Donations.SingleOrDefault(d => d.Id == id);
+            return View("../Donation/Edit", model);
+        }
+        [HttpPost]
+        public ActionResult EditDonation(int id, string purpose, decimal sum, int parishionerId)
+        {
+            var donation = db.Donations.SingleOrDefault(d => d.Id == id);
+            donation.Sum = sum;
+            donation.ParishionerId = parishionerId;
+            donation.Purpose = purpose;
+            db.Donations.Update(donation);
+            db.SaveChanges();
+            IEnumerable<Donation> model = db.Donations;
+            foreach (var item in model)
+            {
+                var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == item.ParishionerId);
+                item.Parishioner = parishioner;
+            }
+            return View("../Donation/Index", model);
+        }
+        public ActionResult DeleteDonation(int id)
+        {
+            var donation = db.Donations.SingleOrDefault(d => d.Id == id);
+            db.Donations.Remove(donation);
+            db.SaveChanges();
+            IEnumerable<Donation> model = db.Donations;
+            foreach (var item in model)
+            {
+                var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == item.ParishionerId);
+                item.Parishioner = parishioner;
+            }
+            return View("../Donation/Index", model);
+        }
+        public ActionResult DonationByParishionerId(int parishionerId)
+        {
+            IEnumerable<Donation> model = db.Donations.Where(d => d.ParishionerId == parishionerId);
+            foreach (var item in model)
+            {
+                var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == item.ParishionerId);
+                item.Parishioner = parishioner;
+            }
+            return View("../Donation/Index", model);
         }
         public IActionResult Privacy()
         {
