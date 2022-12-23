@@ -6,18 +6,22 @@
 <script type="text/javascript">
     function Edit() {
         var chkd = document.querySelectorAll('input:checked');
-        var id = chkd[0].getAttribute("id");
-        var hidden = document.getElementsByName('ids')[0];
-        hidden.value = id;
-        if (chkd.length > 1) {
+        if (chkd.length != 1) {
             document.getElementById('editBtn').disabled = true;
             document.getElementById('delBtn').disabled = true;
         }
-        else{
+        else {
             document.getElementById('editBtn').disabled = false;
             document.getElementById('delBtn').disabled = false;
         }
-    }
+        var id = chkd[0].getAttribute("id");
+        var hidden = document.getElementsByName('ids')[0];
+        hidden.value = id;
+    };
+    window.onload = function () {
+        document.getElementById('editBtn').disabled = true;
+        document.getElementById('delBtn').disabled = true;
+    };
 </script>
 
 
