@@ -50,6 +50,8 @@ namespace CourseWorkDB.Controllers
                         return EditPriest(ids);
                     case "Удалить священнослужителя":
                         return DeletePriest(ids);
+                    case "Повысить священнослужителя":
+                        return UpgradePriest(ids);
                     default:
                         return null;
                 }
@@ -137,6 +139,15 @@ namespace CourseWorkDB.Controllers
             {
                 return View("Error");
             }
+        }
+        public ActionResult UpgradePriest(int id)
+        {
+            SqlParameter parameter = new SqlParameter("@id", id);
+            int rows = db.Database.ExecuteSqlRaw("UpgradePriest @id", parameter);
+            if(rows < 1)
+                TempData["alertMessage"] = "Denied";
+            IEnumerable<Priest> model = db.Priests.AsEnumerable();
+            return View("../Priest/Index", model);
         }
         public ActionResult Parishioner()
         {
