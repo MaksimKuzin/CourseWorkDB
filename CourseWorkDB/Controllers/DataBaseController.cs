@@ -79,6 +79,7 @@ namespace CourseWorkDB.Controllers
                 };
                 db.Priests.Add(priest);
                 db.SaveChanges();
+                db.Database.ExecuteSqlRaw("OnPriestCreate");
                 IEnumerable<Priest> model = db.Priests.AsEnumerable();
                 return View("../Priest/Index", model);
             }
