@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CourseWorkDB.DataBase.Parishioner>
+﻿@model IEnumerable<CourseWorkDB.Models.ParishionerHelper>
 @{
     ViewData["Title"] = "Прихожане";
 }
@@ -57,7 +57,7 @@
                 Священнослужитель
             </th>
             <th>
-                Список пожертвований
+                Сумма пожертвований
             </th>
             <th></th>
         </tr>
@@ -100,7 +100,7 @@
                     @Html.DisplayFor(modelItem => item.Priest.Name)
                 </th>
                 <th>
-                    <a href="~/DataBase/DonationByParishionerId?parishionerId=@item.Id">Список</a>
+                    @Html.DisplayFor(modelItem => item.DonationSum)
                 </th>
                 <th>
                     <input type="checkbox" id="@item.Id" onclick="Edit()">

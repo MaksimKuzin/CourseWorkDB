@@ -41,7 +41,8 @@ namespace CourseWorkDB.Controllers
         }
         public ActionResult PriestActions(string button, int ids)
         {
-            try {
+            try
+            {
                 switch (button)
                 {
                     case "Добавить священнослужителя":
@@ -145,7 +146,7 @@ namespace CourseWorkDB.Controllers
         {
             SqlParameter parameter = new SqlParameter("@id", id);
             int rows = db.Database.ExecuteSqlRaw("UpgradePriest @id", parameter);
-            if(rows < 1)
+            if (rows < 1)
                 TempData["alertMessage"] = "Denied";
             IEnumerable<Priest> model = db.Priests.AsEnumerable();
             return View("../Priest/Index", model);
@@ -154,11 +155,37 @@ namespace CourseWorkDB.Controllers
         {
             try
             {
-                IEnumerable<Parishioner> model = db.Parishioners;
-                foreach (var parishioner in model)
+                var model = new List<ParishionerHelper>();
+                IEnumerable<Parishioner> parishioners = db.Parishioners;
+                foreach (var parishioner in parishioners)
                 {
                     var priest = db.Priests.SingleOrDefault(p => p.Id == parishioner.PriestId);
                     parishioner.Priest = priest;
+                    model.Add(new ParishionerHelper
+                    {
+                        Id = parishioner.Id,
+                        Address = parishioner.Address,
+                        Age = parishioner.Age,
+                        Name = parishioner.Name,
+                        Sex = parishioner.Sex,
+                        Surname = parishioner.Surname,
+                        Patronymic = parishioner.Patronymic,
+                        PhoneNumber = parishioner.PhoneNumber,
+                        Priest = parishioner.Priest,
+                    });
+                }
+                foreach (var item in model)
+                {
+                    SqlParameter parameter = new SqlParameter("@id", item.Id);
+                    var sum = db.Database.SqlQueryRaw<decimal>("SELECT dbo.DonationSum(@id) AS Value", parameter);
+                    try
+                    {
+                        item.DonationSum = sum.ToList()[0];
+                    }
+                    catch
+                    {
+                        item.DonationSum = 0;
+                    }
                 }
                 return View("../Parishioner/Index", model);
             }
@@ -171,11 +198,37 @@ namespace CourseWorkDB.Controllers
         {
             try
             {
-                IEnumerable<Parishioner> model = db.Parishioners.Where(p => p.PriestId == priestId);
-                foreach (var parishioner in model)
+                var model = new List<ParishionerHelper>();
+                IEnumerable<Parishioner> parishioners = db.Parishioners.Where(p => p.PriestId == priestId);
+                foreach (var parishioner in parishioners)
                 {
                     var priest = db.Priests.SingleOrDefault(p => p.Id == parishioner.PriestId);
                     parishioner.Priest = priest;
+                    model.Add(new ParishionerHelper
+                    {
+                        Id = parishioner.Id,
+                        Address = parishioner.Address,
+                        Age = parishioner.Age,
+                        Name = parishioner.Name,
+                        Sex = parishioner.Sex,
+                        Surname = parishioner.Surname,
+                        Patronymic = parishioner.Patronymic,
+                        PhoneNumber = parishioner.PhoneNumber,
+                        Priest = parishioner.Priest,
+                    });
+                }
+                foreach (var item in model)
+                {
+                    SqlParameter parameter = new SqlParameter("@id", item.Id);
+                    var sum = db.Database.SqlQueryRaw<decimal>("SELECT dbo.DonationSum(@id) AS Value", parameter);
+                    try
+                    {
+                        item.DonationSum = sum.ToList()[0];
+                    }
+                    catch
+                    {
+                        item.DonationSum = 0;
+                    }
                 }
                 return View("../Parishioner/Index", model);
             }
@@ -240,7 +293,7 @@ namespace CourseWorkDB.Controllers
                     var prst = db.Priests.SingleOrDefault(p => p.Id == parish.PriestId);
                     parish.Priest = prst;
                 }
-                return View("../Parishioner/Index", model);
+                return Parishioner();
             }
             catch
             {
@@ -292,7 +345,7 @@ namespace CourseWorkDB.Controllers
                     var prst = db.Priests.SingleOrDefault(p => p.Id == parish.PriestId);
                     parish.Priest = prst;
                 }
-                return View("../Parishioner/Index", model);
+                return Parishioner();
             }
             catch
             {
@@ -314,7 +367,7 @@ namespace CourseWorkDB.Controllers
                     var prst = db.Priests.SingleOrDefault(p => p.Id == parish.PriestId);
                     parish.Priest = prst;
                 }
-                return View("../Parishioner/Index", model);
+                return Parishioner();
             }
             catch
             {
