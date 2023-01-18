@@ -419,7 +419,7 @@ namespace CourseWorkDB.Controllers
             try
             {
                 List<string> chars = new List<string>();
-                var model = db.Events.Where(e=>e.Name.StartsWith(query));
+                var model = db.Events.Where(e=>e.Name.Contains(query));
                 return View("../Event/Index", model);
             }
             catch
