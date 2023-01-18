@@ -27,6 +27,10 @@
 
 @using (Html.BeginForm("EventActions", "DataBase", FormMethod.Get))
 {
+    <input type="text" name="query" />
+    <input type="submit"
+       name="button"
+       value="Поиск" />
     <input type="hidden" name="ids" value="" />
     <table class="table">
         <tr>

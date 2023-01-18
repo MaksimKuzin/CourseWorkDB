@@ -332,6 +332,7 @@ namespace CourseWorkDB.Controllers
                 parishioner.Age = age;
                 parishioner.Address = address;
                 parishioner.PhoneNumber = phoneNumber;
+                parishioner.Sex = sex;
                 parishioner.PriestId = priestId;
                 parishioner.Priest = priest;
                 if (!priest.Parishioners.Contains(parishioner))
@@ -386,7 +387,7 @@ namespace CourseWorkDB.Controllers
                 return View("Error");
             }
         }
-        public ActionResult EventActions(string button, int ids)
+        public ActionResult EventActions(string button, int ids, string query)
         {
             try
             {
@@ -402,9 +403,24 @@ namespace CourseWorkDB.Controllers
                         return EditEvent(ids);
                     case "Удалить мероприятие":
                         return DeleteEvent(ids);
+                    case "Поиск":
+                        return SearchByName(query);
                     default:
                         return null;
                 }
+            }
+            catch
+            {
+                return View("Error");
+            }
+        }
+        public ActionResult SearchByName(string query)
+        {
+            try
+            {
+                List<string> chars = new List<string>();
+                var model = db.Events.Where(e=>e.Name.StartsWith(query));
+                return View("../Event/Index", model);
             }
             catch
             {
