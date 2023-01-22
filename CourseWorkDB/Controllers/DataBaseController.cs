@@ -265,10 +265,13 @@ namespace CourseWorkDB.Controllers
             return View("../Parishioner/Create");
         }
         [HttpPost]
-        public ActionResult CreateParishioner(string name, string surname, string patronymic, short age, bool sex, string address, string phoneNumber, int priestId)
+        public ActionResult CreateParishioner(string name, string surname, string patronymic, short age, int sex, string address, string phoneNumber, int priestId)
         {
             try
             {
+                bool bSex = false;
+                if (sex == 1)
+                    bSex = true;
                 var priest = db.Priests.SingleOrDefault(p => p.Id == priestId);
                 var parishioner = new Parishioner
                 {
@@ -278,7 +281,7 @@ namespace CourseWorkDB.Controllers
                     Surname = surname,
                     Patronymic = patronymic,
                     Age = age,
-                    Sex = sex,
+                    Sex = bSex,
                     PriestId = priestId,
                     Priest = priest
                 };
@@ -320,10 +323,13 @@ namespace CourseWorkDB.Controllers
             }
         }
         [HttpPost]
-        public ActionResult EditParishioner(int id, string name, string surname, string patronymic, short age, bool sex, string address, string phoneNumber, int priestId)
+        public ActionResult EditParishioner(int id, string name, string surname, string patronymic, short age, int sex, string address, string phoneNumber, int priestId)
         {
             try
             {
+                bool bSex = false;
+                if (sex == 1)
+                    bSex = true;
                 var parishioner = db.Parishioners.SingleOrDefault(p => p.Id == id);
                 var priest = db.Priests.SingleOrDefault(p => p.Id == priestId);
                 parishioner.Name = name;
@@ -332,7 +338,7 @@ namespace CourseWorkDB.Controllers
                 parishioner.Age = age;
                 parishioner.Address = address;
                 parishioner.PhoneNumber = phoneNumber;
-                parishioner.Sex = sex;
+                parishioner.Sex = bSex;
                 parishioner.PriestId = priestId;
                 parishioner.Priest = priest;
                 if (!priest.Parishioners.Contains(parishioner))
