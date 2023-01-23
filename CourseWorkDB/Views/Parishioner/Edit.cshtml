@@ -8,66 +8,66 @@
 <hr />
 <div class="row">
 	<div class="col-md-4">
-		<form asp-action="EditParishioner">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<input type="hidden" name="id" value="@Model.Id" />
-			<div class="form-group">
-				<label asp-for="Name" class="control-label"></label>
-				<input asp-for="Name" class="form-control" />
-				<span asp-validation-for="Name" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Surname" class="control-label"></label>
-				<input asp-for="Surname" class="form-control" />
-				<span asp-validation-for="Surname" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Patronymic" class="control-label"></label>
-				<input asp-for="Patronymic" class="form-control" />
-				<span asp-validation-for="Patronymic" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Age" class="control-label"></label>
-				<input asp-for="Age" class="form-control" />
-				<span asp-validation-for="Age" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				@if (Model.Sex == true)
+        <form asp-action="EditParishioner">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="form-group">
+                <label asp-for="Surname" class="control-label"></label>
+                <input asp-for="Surname" class="form-control" />
+                <span asp-validation-for="Surname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Patronymic" class="control-label"></label>
+                <input asp-for="Patronymic" class="form-control" />
+                <span asp-validation-for="Patronymic" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @if (Model.Sex == true)
 				{
-					<label asp-for="Sex" class="control-label"></label>
-					<select name="sex" class="form-select">
-						<option value="1">Мужчина</option>
-						<option value="0">Женщина</option>
-					</select>
+                <label asp-for="Sex" class="control-label"></label>
+                <select name="sex" class="form-select">
+                    <option value="1">Мужчина</option>
+                    <option value="0">Женщина</option>
+                </select>
 				}
 				else
 				{
-					<label asp-for="Sex" class="control-label"></label>
-					<select name="sex" class="form-select">
-						<option value="1">Мужчина</option>
-						<option selected value="0">Женщина</option>
-					</select>
+                <label asp-for="Sex" class="control-label"></label>
+                <select name="sex" class="form-select">
+                    <option value="1">Мужчина</option>
+                    <option selected value="0">Женщина</option>
+                </select>
 				}
-			</div>
-			<div class="form-group">
-				<label asp-for="Address" class="control-label"></label>
-				<input asp-for="Address" class="form-control" />
-				<span asp-validation-for="Address" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="PhoneNumber" class="control-label"></label>
-				<input asp-for="PhoneNumber" class="form-control" />
-				<span asp-validation-for="PhoneNumber" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="PriestId" class="control-label"></label>
-				<input asp-for="PriestId" class="form-control" />
-				<span asp-validation-for="PriestId" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<input type="submit" value="Сохранить" class="btn btn-primary" />
-			</div>
-		</form>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriestId" class="control-label"></label>
+                <input asp-for="PriestId" class="form-control" />
+                <span asp-validation-for="PriestId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
+        </form>
 	</div>
 </div>
 
