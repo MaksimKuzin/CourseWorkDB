@@ -1,13 +1,25 @@
-﻿@model CourseWorkDB.DataBase.Parishioner
+﻿@using CourseWorkDB.DataBase
+@model CourseWorkDB.DataBase.Parishioner
 
 @{
-	ViewData["Title"] = "Изменить прихожанина";
+    ViewData["Title"] = "Изменить прихожанина";
 }
+@{
+    var db = new ChurchParishCourseWorkContext();
+    List<Priest> priests = db.Priests.ToList();
 
+    string Check(int priestId)
+    {
+        if (priestId == Model.PriestId)
+            return "selected";
+        else
+            return "";
+    }
+}
 
 <hr />
 <div class="row">
-	<div class="col-md-4">
+    <div class="col-md-4">
         <form asp-action="EditParishioner">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" name="id" value="@Model.Id" />
@@ -33,21 +45,21 @@
             </div>
             <div class="form-group">
                 @if (Model.Sex == true)
-				{
-                <label asp-for="Sex" class="control-label"></label>
-                <select name="sex" class="form-select">
-                    <option value="1">Мужчина</option>
-                    <option value="0">Женщина</option>
-                </select>
-				}
-				else
-				{
-                <label asp-for="Sex" class="control-label"></label>
-                <select name="sex" class="form-select">
-                    <option value="1">Мужчина</option>
-                    <option selected value="0">Женщина</option>
-                </select>
-				}
+                {
+                    <label asp-for="Sex" class="control-label"></label>
+                    <select name="sex" class="form-select">
+                        <option value="1">Мужчина</option>
+                        <option value="0">Женщина</option>
+                    </select>
+                }
+                else
+                {
+                    <label asp-for="Sex" class="control-label"></label>
+                    <select name="sex" class="form-select">
+                        <option value="1">Мужчина</option>
+                        <option selected value="0">Женщина</option>
+                    </select>
+                }
             </div>
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
@@ -60,23 +72,34 @@
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PriestId" class="control-label"></label>
-                <input asp-for="PriestId" class="form-control" />
-                <span asp-validation-for="PriestId" class="text-danger"></span>
+                <label class="control-label">Священнослужитель</label>
+                <select name="priestId" class="form-select">
+                    @foreach (var priest in priests)
+                    {
+                        if (Check(priest.Id) == "selected")
+                        {
+                            <option selected value="@priest.Id">@priest.Title @priest.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@priest.Id">@priest.Title @priest.Name</option>
+                        }
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
-	</div>
+    </div>
 </div>
 
 <div>
-	<a asp-action="Parishioner">Назад к списку</a>
+    <a asp-action="Parishioner">Назад к списку</a>
 </div>
 
 @section Scripts {
-	@{
-		await Html.RenderPartialAsync("_ValidationScriptsPartial");
-	}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 	}

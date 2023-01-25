@@ -1,9 +1,21 @@
-﻿@model CourseWorkDB.DataBase.Donation
+﻿@using CourseWorkDB.DataBase
+@model CourseWorkDB.DataBase.Donation
 
 @{
     ViewData["Title"] = "Изменить пожертвования";
 }
+@{
+    var db = new ChurchParishCourseWorkContext();
+    List<Parishioner> parishioners = db.Parishioners.ToList();
 
+    string Check(int parishionerId)
+    {
+        if (parishionerId == Model.ParishionerId)
+            return "selected";
+        else
+            return "";
+    }
+}
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -21,9 +33,20 @@
                 <span asp-validation-for="Purpose" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ParishionerId" class="control-label"></label>
-                <input asp-for="ParishionerId" class="form-control" />
-                <span asp-validation-for="ParishionerId" class="text-danger"></span>
+                <label class="control-label">Прихожанин</label>
+                <select name="parishionerId" class="form-select">
+                    @foreach (var parishioner in parishioners)
+                    {
+                        if (Check(parishioner.Id) == "selected")
+                        {
+                            <option selected value="@parishioner.Id">@parishioner.Surname @parishioner.Name @parishioner.Patronymic</option>
+                        }
+                        else
+                        {
+                            <option value="@parishioner.Id">@parishioner.Surname @parishioner.Name @parishioner.Patronymic</option>
+                        }
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />

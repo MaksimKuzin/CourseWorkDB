@@ -1,9 +1,13 @@
-﻿@model CourseWorkDB.DataBase.Activity
+﻿@using CourseWorkDB.DataBase
+@model CourseWorkDB.DataBase.Activity
 
 @{
     ViewData["Title"] = "Добавить деятельность";
 }
-
+@{
+    var db = new ChurchParishCourseWorkContext();
+    List<Priest> priests = db.Priests.ToList();
+}
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -20,9 +24,13 @@
                 <span asp-validation-for="Event.Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Event.PriestId" class="control-label"></label>
-                <input name="priestId" asp-for="Event.PriestId" class="form-control" />
-                <span asp-validation-for="Event.PriestId" class="text-danger"></span>
+                <label class="control-label">Священнослужитель</label>
+                <select name="priestId" class="form-select">
+                    @foreach (var priest in priests)
+                    {
+                        <option value="@priest.Id">@priest.Title @priest.Name</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="Duration" class="control-label"></label>

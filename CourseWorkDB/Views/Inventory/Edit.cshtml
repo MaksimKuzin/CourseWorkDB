@@ -1,9 +1,21 @@
-﻿@model CourseWorkDB.DataBase.Inventory
+﻿@using CourseWorkDB.DataBase
+@model CourseWorkDB.DataBase.Inventory
 
 @{
     ViewData["Title"] = "Изменить инвентарь";
 }
+@{
+    var db = new ChurchParishCourseWorkContext();
+    List<Event> events = db.Events.ToList();
 
+    string Check(int eventId)
+    {
+        if (eventId == Model.EventId)
+            return "selected";
+        else
+            return "";
+    }
+}
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -26,9 +38,20 @@
                 <span asp-validation-for="DateOfPurchase" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EventId" class="control-label"></label>
-                <input asp-for="EventId" class="form-control" />
-                <span asp-validation-for="EventId" class="text-danger"></span>
+                <label class="control-label">Мероприятие</label>
+                <select name="eventId" class="form-select">
+                    @foreach (var eevent in events)
+                    {
+                        if (Check(eevent.Id) == "selected")
+                        {
+                            <option selected value="@eevent.Id">@eevent.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@eevent.Id">@eevent.Name</option>
+                        }
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />

@@ -1,9 +1,13 @@
-﻿@model CourseWorkDB.DataBase.Parishioner
+﻿@using CourseWorkDB.DataBase
+@model CourseWorkDB.DataBase.Parishioner
 
 @{
     ViewData["Title"] = "Добавить прихожанина";
 }
-
+@{
+    var db = new ChurchParishCourseWorkContext();
+    List<Priest> priests = db.Priests.ToList();
+}
 
 <hr />
 <div class="row">
@@ -48,9 +52,12 @@
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PriestId" class="control-label"></label>
-                <input asp-for="PriestId" class="form-control" />
-                <span asp-validation-for="PriestId" class="text-danger"></span>
+                <label class="control-label">Священнослужитель</label>
+                <select name="priestId" class="form-select">
+                    @foreach(var priest in priests){
+                        <option value="@priest.Id">@priest.Title @priest.Name</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Добавить" class="btn btn-primary" />
@@ -64,5 +71,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

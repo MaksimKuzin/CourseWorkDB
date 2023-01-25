@@ -1,9 +1,13 @@
-﻿@model CourseWorkDB.Models.DivineServiceHelper
+﻿@using CourseWorkDB.DataBase
+@model CourseWorkDB.Models.DivineServiceHelper
 
 @{
     ViewData["Title"] = "Добавить службу";
 }
-
+@{
+    var db = new ChurchParishCourseWorkContext();
+    List<Priest> priests = db.Priests.ToList();
+}
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -20,9 +24,13 @@
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PriestId" class="control-label"></label>
-                <input asp-for="PriestId" class="form-control" />
-                <span asp-validation-for="PriestId" class="text-danger"></span>
+                <label class="control-label">Священнослужитель</label>
+                <select name="priestId" class="form-select">
+                    @foreach (var priest in priests)
+                    {
+                        <option value="@priest.Id">@priest.Title @priest.Name</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="Justification" class="control-label"></label>
